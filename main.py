@@ -88,13 +88,18 @@ def detect_location(text: str) -> Optional[str]:
 
 @client.on(events.NewMessage(chats=SOURCE_CHATS))
 async def handler(event):
-    raw_msg = event.message.message or ""
-    sender = await event.get_sender()
+    try:
+        if not event.message:
+            return
 
-    if is_menu_announcement(raw_msg):
-        return
+        raw_msg = event.raw_text or ""
+        if not raw_msg:
+            return
 
-    msg = raw_msg.lower()
+        if is_menu_announcement(raw_msg):
+            return
+
+        msg_lower = raw_msg.lower()
 
     trigger = ["kto ma","ktoś ma","ktos ma","kto posiada","kto ogarnia","ktoś ogarnia",
                "ktos ogarnia","szukam","kupie","kupię","wtb","need","poszukuje",
